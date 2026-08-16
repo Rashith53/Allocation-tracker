@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102a43"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png">
+<title>Kee Reminder</title>
+<style>
+:root{--bg:#f5f7fa;--surface:#fff;--navy:#102a43;--blue:#1769e0;--mint:#7fe7c4;--muted:#6b7f93;--line:#e4e9ef;--danger:#c83c3c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--navy);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{overscroll-behavior:none}.app{width:100%;max-width:480px;min-height:100vh;margin:auto;background:var(--bg);padding:0 16px 92px}
+.appbar{position:sticky;top:0;z-index:10;background:rgba(245,247,250,.94);backdrop-filter:blur(12px);padding:16px 0 12px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:12px}.brand h1{font-size:20px;line-height:1;margin:0}.brand p{font-size:11px;color:var(--muted);margin:4px 0 0}
+.icon-btn{width:42px;height:42px;border-radius:13px;background:#fff;border:1px solid var(--line);font-size:18px}
+.hero{background:linear-gradient(135deg,#102a43,#1769e0);color:#fff;border-radius:22px;padding:20px;margin:5px 0 14px;box-shadow:0 10px 26px #102a4320}
+.hero-row{display:flex;justify-content:space-between;align-items:center}.hero .big{font-size:38px;font-weight:850;line-height:1}.hero .label{font-size:12px;opacity:.82;margin-top:4px}.hero-date{font-size:12px;opacity:.9;text-align:right}.progress{height:7px;background:#ffffff38;border-radius:99px;margin-top:16px}.bar{height:100%;width:0;background:#fff;border-radius:99px}
+.add-main{width:100%;height:52px;border:0;border-radius:16px;background:var(--blue);color:#fff;font-weight:800;font-size:15px;box-shadow:0 8px 18px #1769e033;margin-bottom:11px}
+.quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}.quick-title{font-size:12px;font-weight:800;margin-bottom:9px}.chips{display:flex;gap:7px;overflow:auto}.chip{white-space:nowrap;border:1px solid #d9e7fb;background:#f3f7fd;color:#245b9e;border-radius:99px;padding:8px 10px;font-size:11px;font-weight:700}
+.filters{display:flex;gap:7px;overflow:auto;margin:5px 0 12px}.filter{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:99px;padding:8px 13px;font-size:12px;font-weight:750;white-space:nowrap}.filter.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:13px;margin-bottom:12px}
+.section-title{font-size:13px;font-weight:850;margin-bottom:5px}.small{font-size:11px;color:var(--muted);line-height:1.45}
+.task{display:grid;grid-template-columns:25px 1fr auto;gap:11px;align-items:start;padding:14px 2px;border-bottom:1px solid #edf0f4}.task:last-child{border-bottom:0}.check{width:24px;height:24px;border:2px solid #a9b8c7;border-radius:8px;cursor:pointer}.check.done{background:var(--blue);border-color:var(--blue);position:relative}.check.done:after{content:"✓";position:absolute;left:4px;top:-2px;color:#fff;font-size:16px;font-weight:900}.title{font-size:14px;font-weight:750;line-height:1.3}.title.done{text-decoration:line-through;color:#8293a4}.meta{font-size:11px;color:var(--muted);margin-top:5px}.late{color:#b42318;font-weight:800}.acts{display:flex;gap:1px}.icon{background:none;border:0;padding:5px;font-size:15px;color:#74879a}
+.empty{text-align:center;padding:32px 10px;color:var(--muted);font-size:12px}.empty b{display:block;color:var(--navy);font-size:14px;margin-bottom:5px}
+.reminder{display:flex;align-items:center;gap:10px}.bell{width:38px;height:38px;border-radius:12px;background:#eef5ff;display:grid;place-items:center;font-size:18px}.reminder-copy{flex:1}.reminder button{margin-top:8px}
+.primary{background:var(--blue);color:#fff}.ghost{background:#eef3f8;color:var(--navy)}button{font:inherit;border:0;border-radius:12px;padding:10px 12px;font-weight:750}
+.modal{position:fixed;inset:0;background:#102a4370;display:none;align-items:flex-end;justify-content:center;z-index:30;padding:10px}.sheet{background:#fff;width:min(480px,100%);border-radius:22px 22px 14px 14px;padding:18px;max-height:90vh;overflow:auto}.sheet h2{font-size:20px;margin:0 0 15px}.grid{display:grid;gap:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}input,select{font:inherit;width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);outline:none}.repeat{display:grid;grid-template-columns:1fr 1fr;gap:7px}.repeat button{background:#eef3f8;color:var(--muted)}.repeat button.active{background:var(--navy);color:#fff}.footer-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#ffffffee;backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:20}.footer-inner{height:52px;border-radius:17px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);box-shadow:0 -3px 15px #102a4308;color:var(--muted);font-size:11px}
+@media(min-width:700px){body{background:#dfe6ee}.app{box-shadow:0 0 45px #102a4320}}
+
+<style>
+.install-banner{display:none;background:#102a43;color:#fff;border-radius:18px;padding:13px 14px;margin:4px 0 12px;align-items:center;gap:10px;box-shadow:0 8px 22px #102a4320}.install-banner.show{display:flex}.install-copy{flex:1}.install-copy b{font-size:13px}.install-copy span{display:block;font-size:10px;opacity:.78;margin-top:2px}.install-now{background:#7fe7c4;color:#102a43;padding:9px 12px;border-radius:11px;font-size:12px}.install-close{background:transparent;color:#fff;padding:5px;font-size:17px}
+</style></style></head><body>
+<div class="app">
+
+<div class="appbar">
+  <div class="brand"><img class="logo" src="icons/icon-192.png" alt=""><div><h1>Kee Reminder</h1><p>Simple. Private. On time.</p></div></div>
+  <button class="icon-btn" id="installBtn" style="display:none" title="Install Kee Reminder">⬇️</button>
+</div>
+<div class="install-banner" id="installBanner">
+  <div class="install-copy"><b>Install Kee Reminder</b><span>Put it on your home screen like an app.</span></div>
+  <button class="install-now" id="installNow">Install</button>
+  <button class="install-close" id="installClose">×</button>
+</div><section class="hero"><div class="sr"><div><div class="big" id="count">0</div><div class="sub">pending tasks</div></div><div class="sub" id="date"></div></div><div class="progress"><div class="bar" id="bar"></div></div></section>
+
+<button class="add-main" onclick="openNew()">＋ Add new task</button><section class="quick"><div class="quick-title">Quick tasks</div>
+<div class="chips">
+<button class="chip" onclick="quick('PAY EB BILL')">PAY EB BILL</button>
+<button class="chip" onclick="quick('TNMSC INDENT')">TNMSC INDENT</button>
+<button class="chip" onclick="quick('ARV REFILLING')">ARV REFILLING</button>
+<button class="chip" onclick="quick('EVIN PORTAL ENTRY')">EVIN PORTAL ENTRY</button>
+<button class="chip" onclick="quick('DD OFFICE')">DD OFFICE</button>
+</div></section>
+
+<div class="filters"><button class="filter active" data-f="all">All</button><button class="filter" data-f="today">Today</button><button class="filter" data-f="pending">Pending</button><button class="filter" data-f="done">Done</button></div>
+<section class="card" id="list"></section>
+
+<section class="card">
+<b>🔔 Morning reminder</b>
+<div class="smallnote" style="margin:6px 0 10px">Every morning at <b>8:00 AM</b>, Kee Reminder reminds you about today's pending tasks.</div>
+<button class="primary" id="notify">Enable notifications</button>
+<button class="ghost" id="test" style="margin-left:6px">Test</button>
+</section>
+<div class="smallnote" style="text-align:center">Private • Offline • Data stays on this device</div>
+</div>
+
+<div class="modal" id="modal"><div class="sheet">
+<h2 id="modalTitle">Add task</h2><div class="grid">
+<input id="name" maxlength="120" placeholder="Task name">
+<div class="two"><input id="dateInput" type="date"><select id="time"><option value="">No alarm</option><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option></select></div>
+<div><b style="font-size:13px">Repeat</b><div class="repeat" style="margin-top:6px"><button data-r="none" class="active">No repeat</button><button data-r="daily">Daily</button><button data-r="weekly">Weekly</button><button data-r="monthly">Monthly</button></div></div>
+<div class="smallnote">The 8:00 AM morning reminder is automatic for pending tasks scheduled for today. You can also set a separate alarm time above.</div>
+<div class="two"><button class="ghost" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveTask()">Save task</button></div>
+</div></div></div>
+<script>
+const KEY='taskbell_tasks_v2';let tasks=JSON.parse(localStorage.getItem(KEY)||'[]'),editing=null,repeat='none',filter='all';
+const $=id=>document.getElementById(id);const save=()=>localStorage.setItem(KEY,JSON.stringify(tasks));
+function today(){return new Date().toISOString().slice(0,10)}
+function fmt(t){return new Date(t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+function isToday(t){return t&&new Date(t).toDateString()===new Date().toDateString()}
+function render(){let p=tasks.filter(x=>!x.done),d=tasks.filter(x=>x.done);$('count').textContent=p.length;$('bar').style.width=(tasks.length?d.length/tasks.length*100:0)+'%';$('date').textContent=new Date().toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
+let a=tasks.slice().sort((x,y)=>(x.done-y.done)||(new Date(x.due||'2999')-new Date(y.due||'2999')));if(filter==='today')a=a.filter(x=>isToday(x.due)||x.date===today());if(filter==='pending')a=a.filter(x=>!x.done);if(filter==='done')a=a.filter(x=>x.done);
+$('list').innerHTML=a.length?a.map(x=>{let late=x.due&&!x.done&&new Date(x.due)<new Date();return `<div class="task"><div class="check ${x.done?'done':''}" onclick="toggle('${x.id}')"></div><div><div class="title ${x.done?'done':''}">${esc(x.title)}</div><div class="meta">${x.due?'🔔 '+fmt(x.due):'No alarm'}${x.repeat&&x.repeat!=='none'?' · 🔁 '+x.repeat:''}${late?' · ⚠️ Overdue':''}</div></div><div class="acts"><button class="icon" onclick="edit('${x.id}')">✏️</button><button class="icon" onclick="del('${x.id}')">🗑️</button></div></div>`}).join(''):'<div class="empty"><b>Nothing here 🎯</b>Add a task to get started.</div>'}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openNew(pref=''){editing=null;repeat='none';$('modalTitle').textContent='Add task';$('name').value=pref;$('dateInput').value=today();$('time').value='';setRepeat();$('modal').style.display='flex'}
+function quick(n){openNew(n)}
+function edit(id){let x=tasks.find(t=>t.id===id);editing=id;repeat=x.repeat||'none';$('modalTitle').textContent='Edit task';$('name').value=x.title;$('dateInput').value=x.date||today();$('time').value=x.time||'';setRepeat();$('modal').style.display='flex'}
+function closeModal(){$('modal').style.display='none'}
+function setRepeat(){document.querySelectorAll('[data-r]').forEach(b=>b.classList.toggle('active',b.dataset.r===repeat))}
+document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{repeat=b.dataset.r;setRepeat()});
+function saveTask(){let title=$('name').value.trim();if(!title)return alert('Enter a task name.');let date=$('dateInput').value||today(),time=$('time').value,due=time?new Date(date+'T'+time).toISOString():null;
+if(editing){let x=tasks.find(t=>t.id===editing);Object.assign(x,{title,date,time,due,repeat});}else tasks.unshift({id:crypto.randomUUID(),title,date,time,due,repeat,done:false,created:Date.now(),alarmSent:false,morningSent:false});
+save();closeModal();render()}
+function toggle(id){let x=tasks.find(t=>t.id===id);x.done=!x.done;if(x.done)x.morningSent=true;save();render()}
+function del(id){if(confirm('Delete this task?')){tasks=tasks.filter(x=>x.id!==id);save();render()}}
+document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()});
+$('notify').onclick=async()=>{if(!('Notification'in window))return alert('Notifications are not supported here.');let p=await Notification.requestPermission();alert(p==='granted'?'Notifications enabled.':'Please allow notifications in Chrome.')}
+$('test').onclick=()=>notify('Kee Reminder','Test notification is working.');
+function notify(title,body){if('Notification'in window&&Notification.permission==='granted')new Notification(title,{body,icon:'icons/icon-192.png'});else alert(title+'\\n'+body)}
+function morning(){let n=new Date();if(n.getHours()!==8)return;let key=n.toISOString().slice(0,10);let pending=tasks.filter(x=>!x.done&&x.date===key&&!x.morningSent);if(pending.length){notify('Good morning 🔔',pending.length+' pending task'+(pending.length>1?'s':'')+' today: '+pending.slice(0,3).map(x=>x.title).join(', ')+(pending.length>3?'…':''));pending.forEach(x=>x.morningSent=true);save()}}
+function alarms(){let now=Date.now(),changed=false;tasks.forEach(x=>{if(x.due&&!x.done&&!x.alarmSent&&new Date(x.due).getTime()<=now){notify('Task reminder 🔔',x.title);x.alarmSent=true;changed=true;if(x.repeat&&x.repeat!=='none'){let d=new Date(x.due);if(x.repeat==='daily')d.setDate(d.getDate()+1);if(x.repeat==='weekly')d.setDate(d.getDate()+7);if(x.repeat==='monthly')d.setMonth(d.getMonth()+1);x.date=d.toISOString().slice(0,10);x.due=d.toISOString();x.alarmSent=false;x.morningSent=false}}});if(changed)save();render()}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});render();setInterval(()=>{morning();alarms()},15000);
+</script>
+<script>
+let deferredInstall=null;
+const installBtn=document.getElementById('installBtn');
+const installBanner=document.getElementById('installBanner');
+const installNow=document.getElementById('installNow');
+const installClose=document.getElementById('installClose');
+
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+}
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  if(!isStandalone()){installBtn.style.display='block';installBanner.classList.add('show');}
+});
+installBtn?.addEventListener('click',()=>installNow?.click());
+installNow?.addEventListener('click',async()=>{
+  if(!deferredInstall){
+    alert('To install: open this app from its HTTPS website in Chrome, then choose ⋮ → Add to Home screen → Install app.');
+    return;
+  }
+  deferredInstall.prompt();
+  await deferredInstall.userChoice;
+  deferredInstall=null;
+  installBanner.classList.remove('show');installBtn.style.display='none';
+});
+installClose?.addEventListener('click',()=>installBanner.classList.remove('show'));
+window.addEventListener('appinstalled',()=>{
+  installBanner.classList.remove('show');installBtn.style.display='none';
+});
+</script>
+</body></html>
